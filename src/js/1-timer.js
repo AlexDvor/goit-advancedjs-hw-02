@@ -38,7 +38,7 @@ const onBtnClick = ev => {
     return;
   }
 
-  setInterval(() => {
+  const intervalId = setInterval(() => {
     const diff = userSelectedDate - Date.now();
     const { days, hours, minutes, seconds } = convertMs(diff);
     const { valueDays, valueHours, valueMinutes, valueSeconds } = refs;
