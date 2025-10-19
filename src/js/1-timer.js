@@ -94,3 +94,5 @@ const addLeadingZero = value => {
 refs.startBtn.disabled = true;
 flatpickr(refs.inputPicker, options);
 refs.startBtn.addEventListener('click', onBtnClick);
+
+console.log('gggg');
