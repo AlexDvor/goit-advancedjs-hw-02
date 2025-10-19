@@ -1,0 +1,37 @@
+.wrap-datetime {
+  display: flex;
+}
+
+input#datetime-picker {
+  width: 120px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+button[data-start] {
+  margin-left: 10px;
+  width: 80px;
+  height: 30px;
+}
+
+.timer {
+  display: flex;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.value {
+  font-size: 35px;
+}
+
+.label {
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+}

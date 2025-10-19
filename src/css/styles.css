@@ -10,7 +10,7 @@
 @import url('./container.css');
 @import url('./animations.css');
 @import url('simplelightbox/dist/simple-lightbox.min.css');
-@import url('./gallery.css');
-@import url('./form.css');
+@import url('./timer.css');
+@import url('./snackbar.css');
 
 /* Sections style */
