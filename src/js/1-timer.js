@@ -1,6 +1,5 @@
 import flatpickr from 'flatpickr';
 import iziToast from 'izitoast';
-
 const refs = {
   inputPicker: document.querySelector('#datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
@@ -92,5 +91,6 @@ const addLeadingZero = value => {
   return String(value).padStart(2, '0');
 };
 
+refs.startBtn.disabled = true;
 flatpickr(refs.inputPicker, options);
 refs.startBtn.addEventListener('click', onBtnClick);
