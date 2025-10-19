@@ -1,4 +1,5 @@
 import flatpickr from 'flatpickr';
+import iziToast from 'izitoast';
 
 const refs = {
   inputPicker: document.querySelector('#datetime-picker'),
@@ -8,6 +9,8 @@ const refs = {
   valueMinutes: document.querySelector('.value[data-minutes]'),
   valueSeconds: document.querySelector('.value[data-seconds]'),
 };
+
+let userSelectedDate = '';
 
 const options = {
   enableTime: true,
@@ -19,40 +22,7 @@ const options = {
   },
 };
 
-let userSelectedDate = '';
-
-flatpickr(refs.inputPicker, options);
-
-const checkDate = selectDate => {
-  const diff = selectDate - Date.now();
-  if (diff <= 0) {
-    console.log('Please choose a date in the future');
-    return;
-  }
-
-  userSelectedDate = selectDate;
-};
-
-const onBtnClick = ev => {
-  if (!userSelectedDate) {
-    return;
-  }
-
-  const intervalId = setInterval(() => {
-    const diff = userSelectedDate - Date.now();
-    const { days, hours, minutes, seconds } = convertMs(diff);
-    const { valueDays, valueHours, valueMinutes, valueSeconds } = refs;
-
-    valueDays.textContent = String(days).padStart(2, '0');
-    valueHours.textContent = String(hours).padStart(2, '0');
-    valueMinutes.textContent = String(minutes).padStart(2, '0');
-    valueSeconds.textContent = String(seconds).padStart(2, '0');
-  }, 1000);
-};
-
-refs.startBtn.addEventListener('click', onBtnClick);
-
-function convertMs(ms) {
+const convertMs = ms => {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -69,8 +39,58 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
-}
+};
 
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+const checkDate = selectDate => {
+  const diff = selectDate - Date.now();
+
+  if (diff <= 0) {
+    refs.startBtn.disabled = true;
+
+    iziToast.show({
+      backgroundColor: '#fe5044',
+      message: 'Please choose a date in the future',
+      messageColor: 'white',
+      position: 'topRight',
+    });
+
+    return;
+  }
+
+  userSelectedDate = selectDate;
+  refs.startBtn.disabled = false;
+};
+
+const onBtnClick = ev => {
+  if (!userSelectedDate) {
+    return;
+  }
+  refs.startBtn.disabled = true;
+  refs.inputPicker.disabled = true;
+
+  const intervalId = setInterval(() => {
+    const diff = userSelectedDate - Date.now();
+    if (diff <= 0) {
+      clearInterval(intervalId);
+      userSelectedDate = '';
+      refs.startBtn.disabled = false;
+      refs.inputPicker.disabled = false;
+      return;
+    }
+
+    const { days, hours, minutes, seconds } = convertMs(diff);
+    const { valueDays, valueHours, valueMinutes, valueSeconds } = refs;
+
+    valueDays.textContent = addLeadingZero(days);
+    valueHours.textContent = addLeadingZero(hours);
+    valueMinutes.textContent = addLeadingZero(minutes);
+    valueSeconds.textContent = addLeadingZero(seconds);
+  }, 1000);
+};
+
+const addLeadingZero = value => {
+  return String(value).padStart(2, '0');
+};
+
+flatpickr(refs.inputPicker, options);
+refs.startBtn.addEventListener('click', onBtnClick);

@@ -10,6 +10,7 @@
 @import url('./container.css');
 @import url('./animations.css');
 @import url('flatpickr/dist/flatpickr.min.css');
+@import url('izitoast/dist/css/iziToast.min.css');
 @import url('./timer.css');
 @import url('./snackbar.css');
 
